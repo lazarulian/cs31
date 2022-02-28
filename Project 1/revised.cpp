@@ -1,4 +1,5 @@
-// Project 1: Apurva Shah - 100%
+// Apurva Shah: CS 31 Project 1
+
 #include <iostream>
 int main()
 {
