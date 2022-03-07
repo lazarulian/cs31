@@ -18,6 +18,12 @@ int shiftLeft( string array[ ], int n, int amount, string placeholder );
 
 int main()
 {
+
+
+    cout << "This is insane in the membrane" << endl;
+
+
+
     return 0;
 }
 
