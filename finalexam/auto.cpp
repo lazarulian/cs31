@@ -44,7 +44,8 @@ void Engine::intoGear( int gear ) {
 // Auto Class
 
 class Auto {
-
+private:
+int mileage;
 public:
 void drive(Engine engine);
 // puts it into first then second gear
