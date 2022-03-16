@@ -7,18 +7,17 @@ using namespace std;
 class Battery {
     private:
     double myVolts;
-
     public:
     int Year;
     
-    // Constructors
+    // Constructors - Initially Populates the Data 
     Battery();
     Battery(double volts);
-
-    // Accessors
+    Battery(double volts, int year);
+    // Accessors - how to get the data from public and private types
     double getVolts() const; //accessor
-
-    // Mutators
+    double getYear() const;
+    // Mutators - altering data in the public and private types
     void setVolts(double volts);
 };
 
@@ -32,22 +31,32 @@ class Battery {
     Battery::Battery(double volts) {
         myVolts = volts;
     }
+
+    Battery::Battery(double volts, int year) {
+        myVolts = volts;
+        Year = year;
+    }
+
 // Accessor Implementation
     double Battery::getVolts() const {
         return myVolts;
     }
+    double Battery::getYear() const {
+        return Year;
+    }
 
-// Mutator Implementation
+// Mutator/Setters Implementation
     void Battery::setVolts(double volts) {
         myVolts = volts;
     }
 
 int main(){
 
-    Battery doubleA;
-    cout << doubleA.getVolts( ) << " volts" << endl;
-    Battery nineVolts( 9.0 );
-    cout << nineVolts.getVolts( ) << " volts" << endl;
+    Battery nineVolts( 9.0, 2000 );
+    cout << nineVolts.getVolts( ) << " volts" << endl; // 9
+    nineVolts.setVolts(13);
+    cout << nineVolts.getVolts( ) << " volts" << endl; // 13
+
 
     return 0;
 }
