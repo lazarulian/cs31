@@ -19,6 +19,8 @@ int verifyAge (int age_input);
 double verifyWeight (double weight_input);
 void print_stuff (int id, int age, double weight);
 bool verify_employee (BloodDonation method_name);
+int string_to_date(string date_input);
+bool verify_date(string date_input);
 
 ///////////////////////////
 // BLOOD DONATION CLASS //
@@ -100,7 +102,7 @@ class VacationAccount {
     double getBalance();
     
     // mutators
-    bool addVacationToAccount(BloodDonation donation, int donation_date);
+    bool addVacationToAccount(BloodDonation donation, DonationHistory history);
 };
 
 VacationAccount::VacationAccount(int actualId) {
@@ -118,7 +120,7 @@ double VacationAccount::getBalance() {
 }
 
 // Mutator Implementations
-bool VacationAccount::addVacationToAccount(BloodDonation donation, int donation_date) {
+bool VacationAccount::addVacationToAccount(BloodDonation donation, DonationHistory history) {
     if (verify_employee(donation) == true) {
         mBalance = mBalance + 4.00;
         return true;
@@ -152,7 +154,8 @@ class DonationHistory {
 };
 // Constructor
 DonationHistory::DonationHistory(int actualID) {
-    ./wr
+    int employee_id = verifyId(actualID);
+    int times_donated = 0;
 }
 
 // Accessor
@@ -166,9 +169,13 @@ void DonationHistory::getDonationHistory() {
 }
 
 // Mutator
-void DonationHistory::AddDonationEntry(int donation_date) {
-    dates_donated.push_back(donation_date);
-    times_donated++;
+void DonationHistory::AddDonationEntry(string donation_date) {
+    // Need to Implement if Date is in past six months or the same day
+    if (verify_date(donation_date) == true) {
+        int date_placeholder = string_to_date(donation_date);
+        dates_donated.push_back(date_placeholder);
+        times_donated++;
+    }
 }
 
 ////////////
@@ -178,6 +185,8 @@ void DonationHistory::AddDonationEntry(int donation_date) {
 int main () {
 
     BloodDonation sam (705595, 22, 130);
+    VacationAccount sam_vacation (705595);
+    DonationHistory sam_history (705595);
 
     return 0;
 }
@@ -189,6 +198,7 @@ int main () {
 // Helper function implementation for Blood Donation Class
 
 int verifyId (int id_input) {
+    // Verifies that the input ID is correct
     string employee_id;
     
     employee_id = to_string(id_input);
@@ -213,6 +223,7 @@ int verifyId (int id_input) {
 }
 
 int verifyAge (int age_input) {
+    // Verifies that the age parameters are correct
     
     if (age_input < 21 || age_input > 65 ) {
         return -1;
@@ -222,6 +233,7 @@ int verifyAge (int age_input) {
 }
 
 double verifyWeight (double weight_input) {
+    // Verifies that the weight parameters are correct
     
     if (weight_input < 101.00 || weight_input > 280.00) {
         return -1;
@@ -230,6 +242,7 @@ double verifyWeight (double weight_input) {
 }
 
 bool verify_employee (BloodDonation method_name) {
+    // Verifies that a blood donation can occur
     if (method_name.getID() != -1 && method_name.getAge() != -1 && method_name.getWeight() != -1) {
         return true;
     }
@@ -243,4 +256,41 @@ void print_stuff (int id, int age, double weight) {
     cout << "ID: " << id << endl;
     cout << "Age: " << age << endl;
     cout << "Weight: " << weight << endl;
+}
+
+int string_to_date(string date_input) {
+    int date = 0;
+    date_input.erase(date_input.begin()+2);
+    date_input.erase(date_input.begin()+4);
+    stringstream geek(date_input);
+    
+    geek >> date;
+
+    return date;
+}
+
+bool verify_date(string date_input) {
+    int counter = 0;
+    // String Size Is Incorrect
+    if (date_input.size() != 8) {
+        return false;
+    }
+
+    // Slashes are in the correct space
+
+    if (date_input[2] != int('/') || date_input[5] != int('/')) {
+        return false;
+    }
+
+    for (int i = 0; i < date_input.size(); i++) {
+        if (date_input[i] >= int('0') && date_input[i] <= int('9')) {
+            counter++;
+        }
+    }
+
+    if (counter != 6) {
+        return false;
+    }
+
+    return true;
 }
