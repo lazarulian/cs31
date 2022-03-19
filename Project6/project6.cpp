@@ -1,6 +1,8 @@
 // Project 6: Designing your Own Function
 #include <iostream>
 #include <string>
+#include <string.h>
+#include <sstream>
 #include <cassert>
 #include <algorithm>
 #include <cmath>
@@ -10,8 +12,10 @@ using namespace std;
 
 // Declaring The Classes so they can identify each other in the main function
 class BloodDonation;
-class VacationAccount;
 class DonationHistory;
+class VacationAccount;
+class CovidHistory;
+
 
 // Helper function declarations to ensure that the proper parameters are being passed in:
 int verifyId (int id_input);
@@ -21,6 +25,8 @@ void print_stuff (int id, int age, double weight);
 bool verify_employee (BloodDonation method_name);
 int string_to_date(string date_input);
 bool verify_date(string date_input);
+bool verify_history(vector<int> dates_donated);
+int convert_month_int (string input, int type);
 
 ///////////////////////////
 // BLOOD DONATION CLASS //
@@ -80,7 +86,57 @@ void BloodDonation::setWeight(double weight) {
     mWeight = verifyWeight(weight);
 }
 
+/////////////////////////////
+// Donation History Class //
+///////////////////////////
 
+class DonationHistory {
+    private:
+    int employee_id;
+    int times_donated;
+    vector<int> dates_donated;
+
+    public:
+    // constructor
+    DonationHistory(int actualID); // should be called every donation or employee ID creation
+    
+    // accessors
+    vector<int> return_hist();
+    void getDonationHistory();
+
+    // mutators
+    void AddDonationEntry(string donation_date);
+
+};
+// Constructor
+DonationHistory::DonationHistory(int actualID) {
+    int employee_id = verifyId(actualID);
+    int times_donated = 0;
+}
+
+// Accessor
+vector<int> DonationHistory::return_hist() {
+    return dates_donated;
+}
+
+void DonationHistory::getDonationHistory() {
+    cout << "This donor has donated " << times_donated << " times on the following dates: ";
+    for (int i = 0; i < dates_donated.size(); i++) {
+        string temp = to_string(dates_donated[i]);
+        cout << temp[0] << temp[1] << "/" << temp[2] << temp[3] << "/" << temp[4] << temp[5] << ", ";
+
+    }
+}
+
+// Mutator
+void DonationHistory::AddDonationEntry(string donation_date) {
+    // Need to Implement if Date is in past six months or the same day
+    if (verify_date(donation_date) == true) {
+        int date_placeholder = string_to_date(donation_date);
+        dates_donated.push_back(date_placeholder);
+        times_donated++;
+    }
+}
 
 /////////////////////////////
 // Vacation Account Class //
@@ -121,7 +177,7 @@ double VacationAccount::getBalance() {
 
 // Mutator Implementations
 bool VacationAccount::addVacationToAccount(BloodDonation donation, DonationHistory history) {
-    if (verify_employee(donation) == true) {
+    if (verify_employee(donation) == true || verify_history(history.return_hist())) {// add verify donation
         mBalance = mBalance + 4.00;
         return true;
     }
@@ -132,49 +188,61 @@ bool VacationAccount::addVacationToAccount(BloodDonation donation, DonationHisto
 }
 
 /////////////////////////////
-// Donation History Class //
+// Covid History Class    //
 ///////////////////////////
 
-class DonationHistory {
-    private:
+
+class CovidHistory {
+    private: 
     int employee_id;
-    int times_donated;
-    vector<int> dates_donated;
+    vector<int> covid_history;
 
     public:
-    // constructor
-    DonationHistory(int actualID); // should be called every donation or employee ID creation
+
+    // Constructor
+    CovidHistory() {}
+    CovidHistory(int actualID) {
+        employee_id = verifyId(actualID);
+    } // Constructor Overloading
+
+    // CovidHistory(string positive_date) : CovidHistory() {
+    //     if (verify_date(positive_date) == true) {
+    //         covid_history.push_back(string_to_date(positive_date));
+    //     }
+    // }
+
+    // Accessor
+
+    void getCovidHistory(); 
+
+    // Mutator
+
+    void report_positive(string date);
     
-    // accessors
-    void getDonationHistory();
-
-    // mutators
-    void AddDonationEntry(int donation_date);
-
 };
-// Constructor
-DonationHistory::DonationHistory(int actualID) {
-    int employee_id = verifyId(actualID);
-    int times_donated = 0;
-}
+
+// Constructor Implementations
+// CovidHistory::CovidHistory() {
+//     employee_id = 0;
+// }
+// CovidHistory::CovidHistory(int actualID) {
+//     employee_id = verifyId(actualID);
+// }
 
 // Accessor
-void DonationHistory::getDonationHistory() {
-    cout << "This donor has donated " << times_donated << " times on the following dates: ";
-    for (int i = 0; i < dates_donated.size(); i++) {
-        string temp = to_string(dates_donated[i]);
+void CovidHistory::getCovidHistory() {
+    cout << "This employee has tested positive for covid-19 on the following dates: ";
+    for (int i = 0; i < covid_history.size(); i++) {
+        string temp = to_string(covid_history[i]);
         cout << temp[0] << temp[1] << "/" << temp[2] << temp[3] << "/" << temp[4] << temp[5] << ", ";
-
     }
 }
 
 // Mutator
-void DonationHistory::AddDonationEntry(string donation_date) {
-    // Need to Implement if Date is in past six months or the same day
-    if (verify_date(donation_date) == true) {
-        int date_placeholder = string_to_date(donation_date);
-        dates_donated.push_back(date_placeholder);
-        times_donated++;
+
+void CovidHistory::report_positive(string date) {
+    if (verify_date(date) == true) {
+        covid_history.push_back(string_to_date(date));
     }
 }
 
@@ -187,6 +255,13 @@ int main () {
     BloodDonation sam (705595, 22, 130);
     VacationAccount sam_vacation (705595);
     DonationHistory sam_history (705595);
+    CovidHistory sam_covid (705595);
+
+
+
+
+
+
 
     return 0;
 }
@@ -293,4 +368,56 @@ bool verify_date(string date_input) {
     }
 
     return true;
+}
+
+bool verify_history(vector<int> dates_donated) {
+    int last = dates_donated[dates_donated.size()-1];
+    int second_last = dates_donated[dates_donated.size()-2];
+
+// Donated the same day 
+    if (last == second_last) {
+        return false;
+    }
+
+    string last_string = to_string(last);
+    string second_last_string = to_string(second_last);
+
+    // Verify That Employees Cannot Donate More than Once in Six Months
+
+    if (abs(convert_month_int(last_string, 0)-convert_month_int(second_last_string, 0)) == 6) {
+        if (convert_month_int(last_string, 0)<=convert_month_int(second_last_string, 0)) {
+            return false;
+        }
+    }
+
+    else if (abs(convert_month_int(last_string, 0)-convert_month_int(second_last_string, 0)) < 6) {
+        return false;
+    }
+
+    return true;
+
+}
+
+int convert_month_int (string input, int type) {
+    int value = 0;
+    char month_last_first = 'd';
+    char month_last_second = 'd';
+    if (type == 0) {
+            char month_last_first = input[0];
+            char month_last_second = input[1];
+            string last_month = string(1,month_last_first)+month_last_second;
+    
+            stringstream geek(last_month);
+            geek >> value;
+            return value;
+    }
+    else {
+            char month_last_first = input[2];
+            char month_last_second = input[3];
+            string last_month = string(1,month_last_first)+month_last_second;
+
+            stringstream geek(last_month);
+            geek >> value;
+            return value;
+    }
 }
