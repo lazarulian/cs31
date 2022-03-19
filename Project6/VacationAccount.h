@@ -37,3 +37,5 @@ class VacationAccount {
 };
 
 bool verify_employee (BloodDonation method_name);
+
+#endif /* VacationAccount_h */

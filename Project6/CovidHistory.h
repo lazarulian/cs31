@@ -43,3 +43,5 @@ class CovidHistory {
     void report_positive(string date);
     
 };
+
+#endif /* CovidHistory_h */

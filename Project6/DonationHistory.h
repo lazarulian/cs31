@@ -13,8 +13,6 @@
 #include <vector>
 
 #include "BloodDonation.h"
-#include "VacationAccount.h"
-#include "CovidHistory.h"
 
 using namespace std;
 
@@ -42,3 +40,5 @@ int string_to_date(string date_input);
 bool verify_date(string date_input);
 bool verify_history(vector<int> dates_donated);
 int convert_month_int (string input, int type);
+
+#endif /* DonationHistory_h */
