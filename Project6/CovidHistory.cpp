@@ -1,6 +1,7 @@
 //CovidHistory.cpp
 
 #include "CovidHistory.h"
+#include "DonationHistory.h"
 
 // Accessor
 void CovidHistory::getCovidHistory() {
@@ -14,7 +15,5 @@ void CovidHistory::getCovidHistory() {
 // Mutator
 
 void CovidHistory::report_positive(string date) {
-    if (verify_date(date) == true) {
         covid_history.push_back(string_to_date(date));
-    }
 }

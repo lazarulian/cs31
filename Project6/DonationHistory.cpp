@@ -24,11 +24,9 @@ void DonationHistory::getDonationHistory() {
 // Mutator
 void DonationHistory::AddDonationEntry(string donation_date) {
     // Need to Implement if Date is in past six months or the same day
-    if (verify_date(donation_date) == true) {
         int date_placeholder = string_to_date(donation_date);
         dates_donated.push_back(date_placeholder);
         times_donated++;
-    }
 }
 
 
@@ -73,7 +71,10 @@ bool verify_date(string date_input) {
 bool verify_history(vector<int> dates_donated) {
     int last = dates_donated[dates_donated.size()-1];
     int second_last = dates_donated[dates_donated.size()-2];
-
+    
+    if (dates_donated.size() == 0) {
+        return true;
+    }
 // Donated the same day 
     if (last == second_last) {
         return false;

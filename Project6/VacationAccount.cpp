@@ -1,5 +1,4 @@
 #include "VacationAccount.h"
-#include "BloodDonation.h"
 #include "DonationHistory.h"
 
 VacationAccount::VacationAccount(int actualId) {
@@ -23,6 +22,16 @@ bool VacationAccount::addVacationToAccount(BloodDonation donation, DonationHisto
         return true;
     }
     
+    else {
+        return false;
+    }
+}
+
+bool verify_employee (BloodDonation method_name) {
+    // Verifies that a blood donation can occur
+    if (method_name.getID() != -1 && method_name.getAge() != -1 && method_name.getWeight() != -1) {
+        return true;
+    }
     else {
         return false;
     }

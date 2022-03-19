@@ -12,6 +12,10 @@
 #include <cmath>
 #include <vector>
 
+#include "BloodDonation.h"
+#include "VacationAccount.h"
+#include "CovidHistory.h"
+
 using namespace std;
 
 

@@ -13,6 +13,8 @@
 #include <cmath>
 #include <vector>
 
+#include "DonationHistory.h"
+
 using namespace std;
 
 class CovidHistory {
@@ -29,9 +31,7 @@ class CovidHistory {
     } // Constructor Overloading
 
     CovidHistory(string positive_date) : CovidHistory() {
-        if (verify_date(positive_date) == true) {
             covid_history.push_back(string_to_date(positive_date));
-        }
     } // Constructor Delegation
 
     // Accessor

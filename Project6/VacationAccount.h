@@ -12,6 +12,11 @@
 #include <cmath>
 #include <vector>
 
+#include "DonationHistory.h"
+
+using namespace std;
+
+
 class VacationAccount {
     // The class VacationAccount stores the amount of vacation hours an employee has based off of the amount of blood they have donated in total
     

@@ -21,7 +21,7 @@ class CovidHistory;
 int verifyId (int id_input);
 int verifyAge (int age_input);
 double verifyWeight (double weight_input);
-void print_stuff (int id, int age, double weight);
+void print_stuff (BloodDonation donor, VacationAccount account, DonationHistory history, CovidHistory covid);
 bool verify_employee (BloodDonation method_name);
 int string_to_date(string date_input);
 bool verify_date(string date_input);
@@ -131,11 +131,9 @@ void DonationHistory::getDonationHistory() {
 // Mutator
 void DonationHistory::AddDonationEntry(string donation_date) {
     // Need to Implement if Date is in past six months or the same day
-    if (verify_date(donation_date) == true) {
         int date_placeholder = string_to_date(donation_date);
         dates_donated.push_back(date_placeholder);
         times_donated++;
-    }
 }
 
 /////////////////////////////
@@ -209,7 +207,7 @@ class CovidHistory {
     //     if (verify_date(positive_date) == true) {
     //         covid_history.push_back(string_to_date(positive_date));
     //     }
-    // }
+    // } // Constructor Delegation
 
     // Accessor
 
@@ -221,13 +219,6 @@ class CovidHistory {
     
 };
 
-// Constructor Implementations
-// CovidHistory::CovidHistory() {
-//     employee_id = 0;
-// }
-// CovidHistory::CovidHistory(int actualID) {
-//     employee_id = verifyId(actualID);
-// }
 
 // Accessor
 void CovidHistory::getCovidHistory() {
@@ -241,9 +232,7 @@ void CovidHistory::getCovidHistory() {
 // Mutator
 
 void CovidHistory::report_positive(string date) {
-    if (verify_date(date) == true) {
         covid_history.push_back(string_to_date(date));
-    }
 }
 
 ////////////
@@ -251,20 +240,39 @@ void CovidHistory::report_positive(string date) {
 //////////
 
 int main () {
-
+    // Testing Blood Donation
     BloodDonation sam (705595, 22, 130);
     VacationAccount sam_vacation (705595);
     DonationHistory sam_history (705595);
     CovidHistory sam_covid (705595);
-
-
-
-
-
-
+    sam_history.AddDonationEntry("3/19/22");
+    sam_vacation.addVacationToAccount(sam, sam_history);
+    sam_covid.report_positive("3/19/22");
+    print_stuff(sam, sam_vacation, sam_history, sam_covid);
+    sam_history.AddDonationEntry("3/19/22");
+    sam_vacation.addVacationToAccount(sam, sam_history);
+    print_stuff(sam, sam_vacation, sam_history, sam_covid);
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -327,10 +335,14 @@ bool verify_employee (BloodDonation method_name) {
 }
 
 // Function to help test whether the main is working or not
-void print_stuff (int id, int age, double weight) {
-    cout << "ID: " << id << endl;
-    cout << "Age: " << age << endl;
-    cout << "Weight: " << weight << endl;
+void print_stuff (BloodDonation donor, VacationAccount account, DonationHistory history, CovidHistory covid) {
+    cout << "ID: " << donor.getID() << endl;
+    cout << "Age: " << donor.getAge() << endl;
+    cout << "Weight: " << donor.getWeight() << endl;
+
+    cout << "Balance: " << account.getBalance() << endl;
+    history.getDonationHistory();
+    covid.getCovidHistory();
 }
 
 int string_to_date(string date_input) {
@@ -358,7 +370,7 @@ bool verify_date(string date_input) {
     }
 
     for (int i = 0; i < date_input.size(); i++) {
-        if (date_input[i] >= int('0') && date_input[i] <= int('9')) {
+        if (int(date_input[i]) >= int('0') && int(date_input[i]) <= int('9')) {
             counter++;
         }
     }
@@ -375,6 +387,10 @@ bool verify_history(vector<int> dates_donated) {
     int second_last = dates_donated[dates_donated.size()-2];
 
 // Donated the same day 
+    if (dates_donated.size() == 0) {
+        return true;
+    }
+
     if (last == second_last) {
         return false;
     }
